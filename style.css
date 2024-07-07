@@ -1,6 +1,6 @@
 main {
     margin: 10px;
-    padding: 5px 7px 5px;
+    padding: 5px 7px;
 }
 
 input {
@@ -44,7 +44,7 @@ table {
 }
 
 .greybutton {
-    background-color: #cccccc;
+    background-color: #ccc;
 }
 
 .bluebutton {
