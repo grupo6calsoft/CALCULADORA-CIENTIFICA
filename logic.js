@@ -1,7 +1,6 @@
 class CalculadoraBasica {
-
     constructor() {
-        this.basicOperationShape = new RegExp("(([1-9][0-9]*|[0.])(.[0-9]*[1-9])?[\-\+\*\/])(([1-9][0-9]*|[0.])(.[0-9]*[1-9])?)");
+        this.basicOperationPattern = /^[0-9+\-*/().]+$/; // Asegurarse de que la expresión contenga solo caracteres válidos
         this.memoryRegister = 0;
     }
 
@@ -19,18 +18,17 @@ class CalculadoraBasica {
     }
 
     writeToDisplay(data) {
-        let legacy = document.getElementById("displayBox").value;
-        if (data == ".") {
-            legacy += data;
+        let display = document.getElementById("displayBox");
+        if (data === ".") {
+            display.value += data;
         } else {
-            legacy = legacy == "0" ? data : legacy + data;
+            display.value = display.value === "0" ? data : display.value + data;
         }
-        document.getElementById("displayBox").value = legacy;
     }
 
     writeOperatorToDisplay(operator) {
-        let legacy = document.getElementById("displayBox").value;
-        if (this.basicOperationShape.test(legacy)) {
+        let display = document.getElementById("displayBox");
+        if (this.basicOperationPattern.test(display.value)) {
             this.solveOperation();
         }
         this.writeToDisplay(operator);
@@ -43,25 +41,26 @@ class CalculadoraBasica {
     solveOperation() {
         let operation = document.getElementById("displayBox").value;
         let result = 0;
-        try {
-            // Safe evaluation of mathematical expressions
-            result = this.safeEvaluate(operation);
-        } catch (err) {
-            alert("Syntax error");
+
+        if (this.basicOperationPattern.test(operation)) {
+            try {
+                result = this.evaluateExpression(operation);
+            } catch (err) {
+                alert("Syntax error");
+                this.clearDisplay();
+            }
+        } else {
+            alert("Invalid characters in expression");
             this.clearDisplay();
         }
+
         document.getElementById("displayBox").value = result;
         return result;
     }
 
-    // Safe evaluation method
-    safeEvaluate(expression) {
-        let safeExpression = expression.replace(/[^0-9+\-*/().]/g, ''); // Remove unsafe characters
-        try {
-            return new Function('return ' + safeExpression)(); // Use Function constructor in a controlled way
-        } catch (e) {
-            return 'Syntax Error';
-        }
+    evaluateExpression(expression) {
+        // Simple parser for basic arithmetic expressions
+        return Function('"use strict";return (' + expression + ')')();
     }
 }
 
@@ -85,7 +84,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     writeToDisplay(data) {
-        if (document.getElementById("displayBox").value == "Syntax Error") {
+        if (document.getElementById("displayBox").value === "Syntax Error") {
             super.clearDisplay();
         }
         super.writeToDisplay(data);
@@ -94,7 +93,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     writeOperatorToDisplay(operator) {
-        if (document.getElementById("displayBox").value == "Syntax Error") {
+        if (document.getElementById("displayBox").value === "Syntax Error") {
             super.clearDisplay();
         }
         this.operationString += operator;
@@ -104,25 +103,29 @@ class CalculadoraCientifica extends CalculadoraBasica {
 
     solveOperation() {
         let result = 0;
-        try {
-            result = this.safeEvaluate(this.operationString);
-        } catch (err) {
+
+        if (this.basicOperationPattern.test(this.operationString)) {
+            try {
+                result = this.evaluateExpression(this.operationString);
+            } catch (err) {
+                result = "Syntax Error";
+            }
+        } else {
             result = "Syntax Error";
         }
+
         document.getElementById("displayBox").value = result;
-        this.operationString = "";
-        this.operationString += result;
+        this.operationString = result.toString();
         this.justSolved = true;
         return result;
     }
 
-    safeEvaluate(expression) {
-        let safeExpression = expression.replace(/[^0-9+\-*/().]/g, ''); // Remove unsafe characters
-        try {
-            return new Function('return ' + safeExpression)(); // Use Function constructor in a controlled way
-        } catch (e) {
-            return 'Syntax Error';
+    evaluateExpression(expression) {
+        // Replaces mathematical functions and evaluates the expression
+        for (let key in this.operationMap) {
+            expression = expression.replace(new RegExp(key, "g"), this.operationMap[key]);
         }
+        return Function('"use strict";return (' + expression + ')')();
     }
 
     clearDisplay() {
@@ -131,16 +134,16 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     toggleSign() {
-        var displayBox = document.getElementById("displayBox");
-        var displayContents = displayBox.value;
-        if (displayContents == "Syntax Error") {
+        let displayBox = document.getElementById("displayBox");
+        let displayContents = displayBox.value;
+        if (displayContents === "Syntax Error") {
             super.clearDisplay();
         }
-        if (displayContents == "0") {
+        if (displayContents === "0") {
             displayBox.value = "-";
             this.operationString += "-";
         } else {
-            displayBox.value = "-" + displayBox.value;
+            displayBox.value = "-" + displayContents;
             this.operationString = "-" + this.operationString;
         }
     }
@@ -160,16 +163,13 @@ class CalculadoraCientifica extends CalculadoraBasica {
 
     eraseLastInput() {
         this.inputList.pop();
-        var recreatedOperation = this.inputList.join('');
+        let recreatedOperation = this.inputList.join('');
         document.getElementById("displayBox").value = recreatedOperation;
-        for (var key in this.operationMap) {
-            recreatedOperation = recreatedOperation.replace(key, this.operationMap[key]);
-        }
         this.operationString = recreatedOperation;
     }
 
     writeMathFunction(data) {
-        if (document.getElementById("displayBox").value == "Syntax Error") {
+        if (document.getElementById("displayBox").value === "Syntax Error") {
             super.clearDisplay();
         }
         super.writeToDisplay(data);
@@ -178,11 +178,11 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     calculateFactorial() {
-        var number = parseInt(this.operationString.split(/[^0-9]/).filter(Boolean)[0]);
-        var result = 0;
+        let number = parseInt(this.operationString.match(/\d+/));
+        let result = 0;
         try {
             result = this.calculateRecursiveFactorial(number);
-        } catch(err) {
+        } catch (err) {
             document.getElementById("displayBox").value = "That number is too big";
         }
         this.clearDisplay();
@@ -197,29 +197,28 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     nthTenPower() {
-        var number = parseInt(this.operationString.split(/[^0-9]/).filter(Boolean)[0]);
+        let number = parseInt(this.operationString.match(/\d+/));
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(10, number);
     }
 
     square() {
-        var number = parseInt(this.operationString.split(/[^0-9]/).filter(Boolean)[0]);
+        let number = parseInt(this.operationString.match(/\d+/));
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(number, 2);
     }
 
     cube() {
-        var number = parseInt(this.operationString.split(/[^0-9]/).filter(Boolean)[0]);
+        let number = parseInt(this.operationString.match(/\d+/));
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(number, 3);
     }
 
     inverseNumber() {
-        var number = parseInt(this.operationString.split(/[^0-9]/).filter(Boolean)[0]);
+        let number = parseInt(this.operationString.match(/\d+/));
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(number, -1);
     }
 }
 
 const calculadora = new CalculadoraCientifica();
-
