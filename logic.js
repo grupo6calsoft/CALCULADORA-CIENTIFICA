@@ -241,7 +241,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     nthTenPower() {
-        let number = parseInt(this.operationString.match(/\d+/));
+        let number = parseInt(this.operationString.match(/\d+/), 10);
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(10, number);
     }
