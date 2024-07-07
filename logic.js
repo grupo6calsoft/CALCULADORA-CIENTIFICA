@@ -222,7 +222,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     calculateFactorial() {
-        let number = parseInt(this.operationString.match(/\d+/));
+        let number = parseInt(this.operationString.match(/\d+/), 10);
         let result = 0;
         try {
             result = this.calculateRecursiveFactorial(number);
