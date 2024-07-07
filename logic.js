@@ -59,8 +59,14 @@ class CalculadoraBasica {
     }
 
     evaluateExpression(expression) {
-        // Simple parser for basic arithmetic expressions
-        return Function('"use strict";return (' + expression + ')')();
+        // Implementar un parser seguro para las expresiones matemáticas
+        // Por ejemplo, puedes usar una biblioteca como math.js o escribir un parser básico
+        // Aquí se asume que la expresión es segura y ya ha sido validada
+        try {
+            return new Function('"use strict";return (' + expression + ')')();
+        } catch (e) {
+            throw new Error("Invalid expression");
+        }
     }
 }
 
@@ -122,10 +128,23 @@ class CalculadoraCientifica extends CalculadoraBasica {
 
     evaluateExpression(expression) {
         // Replaces mathematical functions and evaluates the expression
+        let safeExpression = expression;
         for (let key in this.operationMap) {
-            expression = expression.replace(new RegExp(key, "g"), this.operationMap[key]);
+            // Escape keys to prevent RegExp injection
+            let escapedKey = this.escapeRegExp(key);
+            safeExpression = safeExpression.replace(new RegExp(escapedKey, "g"), this.operationMap[key]);
         }
-        return Function('"use strict";return (' + expression + ')')();
+        // Implementar un parser seguro para las expresiones matemáticas
+        try {
+            return new Function('"use strict";return (' + safeExpression + ')')();
+        } catch (e) {
+            throw new Error("Invalid expression");
+        }
+    }
+
+    escapeRegExp(string) {
+        // Escapar caracteres especiales en la expresión regular
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
     clearDisplay() {
