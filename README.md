@@ -1,10 +1,11 @@
 # Calculadora cientifica
-Calculadora cientifica desarrollada en HTML,  CSS y JAVASCRIP
 
-_En el siguiente glosario se encuentran las funciones que se utilizaran para darle funcionalidad 
-a ciertos botones, al lado de cada funcion se encuentra su correspondiente signo o texto._
+Calculadora cientifica desarrollada en HTML, CSS y JAVASCRIPT
 
-## Nombre de las funciones:
+_En el siguiente glosario se encuentran las funciones que se utilizaran para darle funcionalidad a ciertos botones, al lado de cada funcion se encuentra su correspondiente signo o texto._
+
+## Nombre de las funciones
+
 * clearMemory(); // MC
 * readMemory(); // MR
 * addToMemory(); // M+
@@ -45,12 +46,13 @@ a ciertos botones, al lado de cada funcion se encuentra su correspondiente signo
 * toggleSign(); // (-)
 * solveOperation(); // =
 
-**Objeto = calculadora**
+## Objeto
 
-## Nombre de clases:
+**calculadora**
 
-_Las siguientes clases representan la extructura visual de la calculadora y pueden usarlas segun sus nombres, los nombres 
-representan tal cual su funcion en los estilos._
+## Nombre de clases
+
+_Las siguientes clases representan la extructura visual de la calculadora y pueden usarlas segun sus nombres, los nombres representan tal cual su funcion en los estilos._
 
 * .displaytable {}
 * .displaytable-cell {}
