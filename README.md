@@ -48,7 +48,7 @@ _En el siguiente glosario se encuentran las funciones que se utilizaran para dar
 
 ## Objeto
 
-**calculadora**
+### Calculadora
 
 ## Nombre de clases
 
