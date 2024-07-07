@@ -149,7 +149,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
         let safeExpression = expression;
         for (let key in this.operationMap) {
             let escapedKey = this.escapeRegExp(key);
-            safeExpression = safeExpression.replace(new RegExp(escapedKey, "g"), this.operationMap[key]);
+            safeExpression = safeExpression.replace(new RegExp(escapedKey), this.operationMap[key]);
         }
         try {
             return this.simpleEvaluate(safeExpression);
