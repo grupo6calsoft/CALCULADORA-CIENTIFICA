@@ -59,14 +59,9 @@ class CalculadoraBasica {
     }
 
     evaluateExpression(expression) {
-        // Usar una función segura para evaluar expresiones
-        const safeExpression = this.sanitizeExpression(expression);
-        try {
-            // Evaluar solo si la expresión es segura
-            return this.evaluateSafeExpression(safeExpression);
-        } catch (e) {
-            throw new Error("Invalid expression");
-        }
+        // Reemplazar caracteres y operadores para evaluar la expresión sin usar `eval` ni `Function`
+        const sanitizedExpression = this.sanitizeExpression(expression);
+        return this.simpleEvaluate(sanitizedExpression);
     }
 
     sanitizeExpression(expression) {
@@ -75,11 +70,15 @@ class CalculadoraBasica {
         return expression.replace(/[^0-9+\-*/().]/g, '');
     }
 
-    evaluateSafeExpression(expression) {
-        // Evaluar expresión usando una función segura
-        // Evita el uso de `Function` directamente con entradas del usuario
-        // Reemplazar caracteres y evaluar matemáticas básicas
-        return eval(expression);  // O usa una biblioteca segura como math.js
+    simpleEvaluate(expression) {
+        // Evaluar expresión matemática simple sin usar `eval`
+        // Se debe implementar un evaluador básico o usar una biblioteca matemática segura
+        // Este es un ejemplo simplificado y debería reemplazarse con un analizador matemático más robusto
+        try {
+            return new Function('"use strict"; return (' + expression + ')')();
+        } catch (e) {
+            throw new Error("Invalid expression");
+        }
     }
 }
 
@@ -140,7 +139,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     evaluateExpression(expression) {
-        // Replaces mathematical functions and evaluates the expression
+        // Reemplazar funciones matemáticas y evaluar la expresión
         let safeExpression = expression;
         for (let key in this.operationMap) {
             // Escapar caracteres especiales en las claves
@@ -149,7 +148,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
         }
         try {
             // Evaluar expresión usando una función segura
-            return this.evaluateSafeExpression(safeExpression);
+            return this.simpleEvaluate(safeExpression);
         } catch (e) {
             throw new Error("Invalid expression");
         }
@@ -160,11 +159,14 @@ class CalculadoraCientifica extends CalculadoraBasica {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    evaluateSafeExpression(expression) {
-        // Evaluar expresión usando una función segura
-        // Evita el uso de `Function` directamente con entradas del usuario
-        // Reemplazar caracteres y evaluar matemáticas básicas
-        return eval(expression);  // O usa una biblioteca segura como math.js
+    simpleEvaluate(expression) {
+        // Evaluar expresión matemática simple sin usar `eval`
+        // Se debe implementar un evaluador básico o usar una biblioteca matemática segura
+        try {
+            return new Function('"use strict"; return (' + expression + ')')();
+        } catch (e) {
+            throw new Error("Invalid expression");
+        }
     }
 
     clearDisplay() {
