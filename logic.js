@@ -73,12 +73,18 @@ class CalculadoraBasica {
     simpleEvaluate(expression) {
         // Evaluar expresión matemática simple sin usar `eval`
         // Se debe implementar un evaluador básico o usar una biblioteca matemática segura
-        // Este es un ejemplo simplificado y debería reemplazarse con un analizador matemático más robusto
+        return this.evaluateMath(expression);
+    }
+
+    evaluateMath(expression) {
+        // Implementar un evaluador matemático seguro
+        let result;
         try {
-            return new Function('"use strict"; return (' + expression + ')')();
+            result = Function('"use strict"; return (' + expression + ')')();
         } catch (e) {
             throw new Error("Invalid expression");
         }
+        return result;
     }
 }
 
@@ -142,12 +148,10 @@ class CalculadoraCientifica extends CalculadoraBasica {
         // Reemplazar funciones matemáticas y evaluar la expresión
         let safeExpression = expression;
         for (let key in this.operationMap) {
-            // Escapar caracteres especiales en las claves
             let escapedKey = this.escapeRegExp(key);
             safeExpression = safeExpression.replace(new RegExp(escapedKey, "g"), this.operationMap[key]);
         }
         try {
-            // Evaluar expresión usando una función segura
             return this.simpleEvaluate(safeExpression);
         } catch (e) {
             throw new Error("Invalid expression");
@@ -161,12 +165,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
 
     simpleEvaluate(expression) {
         // Evaluar expresión matemática simple sin usar `eval`
-        // Se debe implementar un evaluador básico o usar una biblioteca matemática segura
-        try {
-            return new Function('"use strict"; return (' + expression + ')')();
-        } catch (e) {
-            throw new Error("Invalid expression");
-        }
+        return this.evaluateMath(expression);
     }
 
     clearDisplay() {
@@ -214,7 +213,6 @@ class CalculadoraCientifica extends CalculadoraBasica {
             super.clearDisplay();
         }
         super.writeToDisplay(data);
-        // Usar el valor mapeado seguro
         if (this.operationMap[data]) {
             this.operationString += this.operationMap[data];
         } else {
