@@ -212,12 +212,12 @@ calculateFactorial() {
     let operation;
 
     // Validación de los valores en this.operationMap
-    if (this.operationMap[number]) {
-        operation = this.operationMap[number];
-    } else {
-        console.error("Unknown function: " + number);
-        return;
-    }
+    if (typeof this.operationMap[number] === 'function') {
+  operation = this.operationMap[number];
+} else {
+  console.error("Función desconocida: " + number);
+  return;
+}
 
     try {
         result = this.calculateRecursiveFactorial(number);
