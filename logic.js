@@ -262,5 +262,3 @@ calculateFactorial() {
         document.getElementById("displayBox").value = Math.pow(number, -1);
     }
 }
-
-// const calculadora = new CalculadoraCientifica();
