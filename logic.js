@@ -89,6 +89,9 @@ evaluateMath(expression) {
 }
 
 
+
+    class CalculadoraCientifica extends CalculadoraBasica {
+    
         super.writeToDisplay(data);
         this.operationString += data;
         this.inputList.push(data);
