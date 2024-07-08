@@ -1,3 +1,5 @@
+import * as math from 'mathjs';
+
 class CalculadoraBasica {
     constructor() {
         this.basicOperationPattern = /^[0-9+\-*/().]+$/; // Asegurarse de que la expresión contenga solo caracteres válidos
@@ -75,8 +77,6 @@ class CalculadoraBasica {
         // Se debe implementar un evaluador básico o usar una biblioteca matemática segura
         return this.evaluateMath(expression);
     }
-
-import * as math from 'mathjs';
 
 evaluateMath(expression) {
   let result;
