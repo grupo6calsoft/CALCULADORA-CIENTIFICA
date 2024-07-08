@@ -133,7 +133,10 @@ try {
        let regex;
         for (let key in this.operationMap) {
             let escapedKey = this.escapeRegExp(key);
-            regex = new RegExp(escapedKey, 'g');
+// Definir la expresión regular de forma literal
+const regex = /\d+/g;
+            
+safeExpression = safeExpression.replace(regex, this.operationMap[key]);
 const operation = this.operationMap[key];
 if (operation) {
   safeExpression = safeExpression.replace(regex, operation);
