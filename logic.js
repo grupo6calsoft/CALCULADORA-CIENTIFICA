@@ -151,9 +151,9 @@ if (operation) {
     }
 
     escapeRegExp(string) {
-        // Escapar caracteres especiales en la expresión regular
-        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    }
+  // Escapar caracteres especiales en la expresión regular
+  return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
 
     simpleEvaluate(expression) {
         // Evaluar expresión matemática simple sin usar `eval`
