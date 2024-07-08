@@ -78,7 +78,7 @@ class CalculadoraBasica {
 
     evaluateMath(expression) {
         // Implementar un evaluador matemático seguro
-import * as math from 'mathjs';
+        const math = require('mathjs');
 
 let result;
 try {
