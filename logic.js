@@ -213,10 +213,11 @@ class CalculadoraCientifica extends CalculadoraBasica {
             super.clearDisplay();
         }
         super.writeToDisplay(data);
-        if (this.operationMap[data]) {
-            this.operationString += this.operationMap[data];
-        } else {
-            console.error("Unknown function: " + data);
+        const operation = this.operationMap[data];
+if (operation) {
+  this.operationString += operation;
+} else {
+  console.error("Unknown function: " + data);
         }
         this.inputList.push(data);
     }
