@@ -213,17 +213,28 @@ if (operation) {
         this.inputList.push(data);
     }
 
-    calculateFactorial() {
-        let number = parseInt(this.operationString.match(/\d+/), 10);
-        let result = 0;
-        try {
-            result = this.calculateRecursiveFactorial(number);
-        } catch (err) {
-            document.getElementById("displayBox").value = "That number is too big";
-        }
-        this.clearDisplay();
-        document.getElementById("displayBox").value = result;
+calculateFactorial() {
+    let number = parseInt(this.operationString.match(/\d+/), 10);
+    let result = 0;
+    let operation;
+
+    // Validación de los valores en this.operationMap
+    if (this.operationMap[number]) {
+        operation = this.operationMap[number];
+    } else {
+        console.error("Unknown function: " + number);
+        return;
     }
+
+    try {
+        result = this.calculateRecursiveFactorial(number);
+    } catch (err) {
+        document.getElementById("displayBox").value = "That number is too big";
+    }
+
+    this.clearDisplay();
+    document.getElementById("displayBox").value = result;
+}
 
     calculateRecursiveFactorial(number) {
         if (number === 1 || number === 0) {
