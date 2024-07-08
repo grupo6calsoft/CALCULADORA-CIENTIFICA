@@ -251,7 +251,7 @@ class CalculadoraCientifica extends CalculadoraBasica {
     }
 
     square() {
-        let number = parseInt(this.operationString.match(/\d+/));
+        let number = parseInt(this.operationString.match(/\d+/), 10);
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(number, 2);
     }
