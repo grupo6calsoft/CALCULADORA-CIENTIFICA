@@ -201,17 +201,28 @@ if (operation) {
     }
 
     writeMathFunction(data) {
-        if (document.getElementById("displayBox").value === "Syntax Error") {
-            super.clearDisplay();
-        }
-        super.writeToDisplay(data);
-   if (this.operationMap[data]) {
-            this.operationString += this.operationMap[data];
-        } else {
-            console.error("Unknown function: " + data);
-        }
-        this.inputList.push(data);
-    }
+  if (document.getElementById("displayBox").value === "Syntax Error") {
+    super.clearDisplay();
+  }
+  super.writeToDisplay(data);
+
+  // Validar la entrada de datos (ejemplo usando una lista permitida)
+  const allowedFunctions = ["sin", "cos", "tan", "log", "exp", "+" ,"-", "*", "/"];
+  if (!allowedFunctions.includes(data)) {
+    console.error("Función no permitida: " + data);
+    return;
+  }
+
+  // Usar mathjs para la operación matemática
+  try {
+    const result = math.evaluate(this.operationString + data);
+    this.operationString += data;
+    this.inputList.push(data);
+    document.getElementById("displayBox").value = result;
+  } catch (err) {
+    console.error("Error en la operación matemática: " + err);
+  }
+}
 
 calculateFactorial() {
     let number = parseInt(this.operationString.match(/\d+/), 10);
