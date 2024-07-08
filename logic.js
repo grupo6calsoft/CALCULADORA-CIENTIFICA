@@ -90,24 +90,23 @@ try {
     }
 }
 
-class CalculadoraCientifica extends CalculadoraBasica {
+//class CalculadoraCientifica extends CalculadoraBasica {
 
-    constructor() {
-        super();
-        this.inputList = [];
-        this.operationString = "";
-        this.justSolved = false;
-        this.operationMap = {
-            "sin(": "Math.sin(",
-            "cos(": "Math.cos(",
-            "tan(": "Math.tan(",
-            "log(": "Math.log10(",
-            "ln(": "Math.log(",
-            "sqrt(": "Math.sqrt(",
-            "PI": "Math.PI",
-            "e": "Math.E"
-        };
-    }
+  //  constructor() {
+        // this.inputList = [];
+       // this.operationString = "";
+       // this.justSolved = false;
+       // this.operationMap = {
+          //  "sin(": "Math.sin(",
+          //  "cos(": "Math.cos(",
+          //  "tan(": "Math.tan(",
+          //  "log(": "Math.log10(",
+         //   "ln(": "Math.log(",
+           // "sqrt(": "Math.sqrt(",
+          //  "PI": "Math.PI",
+         //   "e": "Math.E"
+      //  };
+   // }
 
     writeToDisplay(data) {
         if (document.getElementById("displayBox").value === "Syntax Error") {
