@@ -88,10 +88,7 @@ evaluateMath(expression) {
   return result;
 }
 
-    writeToDisplay(data) {
-        if (document.getElementById("displayBox").value === "Syntax Error") {
-            super.clearDisplay();
-        }
+
         super.writeToDisplay(data);
         this.operationString += data;
         this.inputList.push(data);
