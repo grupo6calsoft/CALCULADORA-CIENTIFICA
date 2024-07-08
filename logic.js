@@ -150,7 +150,6 @@ class CalculadoraCientifica extends CalculadoraBasica {
         // Reemplazar funciones matemáticas y evaluar la expresión
         let safeExpression = expression;
        let regex;
-        let safeExpression = ''; 
         for (let key in this.operationMap) {
             let escapedKey = this.escapeRegExp(key);
             regex = new RegExp(escapedKey, 'g');
