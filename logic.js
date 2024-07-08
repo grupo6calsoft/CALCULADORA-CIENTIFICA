@@ -78,12 +78,14 @@ class CalculadoraBasica {
 
     evaluateMath(expression) {
         // Implementar un evaluador matemático seguro
-        let result;
-        try {
-            result = Function('"use strict"; return (' + expression + ')')();
-        } catch (e) {
-            throw new Error("Invalid expression");
-        }
+        const math = require('mathjs');
+
+let result;
+try {
+  result = math.evaluate(expression);
+} catch (e) {
+  throw new Error("Invalid expression");
+}
         return result;
     }
 }
