@@ -242,13 +242,13 @@ if (operation) {
     }
 
     cube() {
-        let number = parseInt(this.operationString.match(/\d+/));
+        let number = parseInt(this.operationString.match(/\d+/), 10);
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(number, 3);
     }
 
     inverseNumber() {
-        let number = parseInt(this.operationString.match(/\d+/));
+        let number = parseInt(this.operationString.match(/\d+/), 10);
         this.clearDisplay();
         document.getElementById("displayBox").value = Math.pow(number, -1);
     }
