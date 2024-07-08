@@ -76,18 +76,16 @@ class CalculadoraBasica {
         return this.evaluateMath(expression);
     }
 
-    evaluateMath(expression) {
-        // Implementar un evaluador matemático seguro
-        const math = require('mathjs');
+import * as math from 'mathjs';
 
-let result;
-try {
-  result = math.evaluate(expression);
-} catch (e) {
-  throw new Error("Invalid expression");
-}
-        return result;
-    }
+evaluateMath(expression) {
+  let result;
+  try {
+    result = math.evaluate(expression);
+  } catch (e) {
+    throw new Error("Invalid expression");
+  }
+  return result;
 }
 
     writeToDisplay(data) {
