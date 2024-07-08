@@ -152,8 +152,12 @@ try {
         for (let key in this.operationMap) {
             let escapedKey = this.escapeRegExp(key);
             regex = new RegExp(escapedKey, 'g');
-            safeExpression = safeExpression.replace(regex, this.operationMap[key]);
-        }
+const operation = this.operationMap[key];
+if (operation) {
+  safeExpression = safeExpression.replace(regex, operation);
+} else {
+  console.error("Unknown function: " + key);
+}
         try {
             return this.simpleEvaluate(safeExpression);
         } catch (e) {
