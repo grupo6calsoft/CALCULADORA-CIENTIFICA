@@ -120,14 +120,21 @@ evaluateMath(expression) {
         return result;
     }
 
-    evaluateExpression(expression) {
-        // Reemplazar funciones matemáticas y evaluar la expresión
-        let safeExpression = expression;
-       let regex;
-        for (let key in this.operationMap) {
-            let escapedKey = this.escapeRegExp(key);
-// Definir la expresión regular de forma literal
-const regex = /\d+/g;
+evaluateExpression(expression) {
+  // Reemplazar funciones matemáticas y evaluar la expresión
+  let safeExpression = expression;
+  for (let key in this.operationMap) {
+    let escapedKey = this.escapeRegExp(key);
+    // Definir la expresión regular directamente dentro del replace
+    safeExpression = safeExpression.replace(/\d+/g, this.operationMap[key]);
+  }
+
+  try {
+    return this.simpleEvaluate(safeExpression);
+  } catch (e) {
+    throw new Error("Invalid expression");
+  }
+}
             
 safeExpression = safeExpression.replace(regex, this.operationMap[key]);
 const operation = this.operationMap[key];
