@@ -4,6 +4,19 @@ class CalculadoraBasica {
     constructor() {
         this.basicOperationPattern = /^[0-9+\-*/().]+$/; // Asegurarse de que la expresión contenga solo caracteres válidos
         this.memoryRegister = 0;
+        this.operationMap = {
+            sin: 'sin',
+            cos: 'cos',
+            tan: 'tan',
+            log: 'log',
+            exp: 'exp',
+            '+': '+',
+            '-': '-',
+            '*': '*',
+            '/': '/'
+        };
+        this.operationString = "";
+        this.inputList = [];
     }
 
     printMemoryContents() {
@@ -78,15 +91,17 @@ class CalculadoraBasica {
         return this.evaluateMath(expression);
     }
 
-evaluateMath(expression) {
-  let result;
-  try {
-    result = math.evaluate(expression);
-  } catch (e) {
-    throw new Error("Invalid expression");
-  }
-  return result;
-}
+    evaluateMath(expression) {
+        let result;
+        try {
+            result = math.evaluate(expression);
+        } catch (e) {
+            throw new Error("Invalid expression");
+        }
+        return result;
+    }
+
+    writeToDisplay(data) {
         super.writeToDisplay(data);
         this.operationString += data;
         this.inputList.push(data);
@@ -120,43 +135,34 @@ evaluateMath(expression) {
         return result;
     }
 
-evaluateExpression(expression) {
-  // Reemplazar funciones matemáticas y evaluar la expresión
-  let safeExpression = expression;
-  for (let key in this.operationMap) {
-    let escapedKey = this.escapeRegExp(key);
-    // Definir la expresión regular directamente dentro del replace
-    safeExpression = safeExpression.replace(/\d+/g, this.operationMap[key]);
-  }
+    evaluateExpression(expression) {
+        // Reemplazar funciones matemáticas y evaluar la expresión
+        let safeExpression = expression;
+        for (let key in this.operationMap) {
+            let escapedKey = this.escapeRegExp(key);
+            // Definir la expresión regular directamente dentro del replace
+            safeExpression = safeExpression.replace(new RegExp(escapedKey, 'g'), this.operationMap[key]);
+        }
 
-  try {
-    return this.simpleEvaluate(safeExpression);
-  } catch (e) {
-    throw new Error("Invalid expression");
-  }
-}
-            
-safeExpression = safeExpression.replace(regex, this.operationMap[key]);
-const operation = this.operationMap[key];
-if (operation) {
-  safeExpression = safeExpression.replace(regex, operation);
-} else {
-  console.error("Unknown function: " + key);
-}
         try {
             return this.simpleEvaluate(safeExpression);
         } catch (e) {
             throw new Error("Invalid expression");
         }
     }
-function escapeRegExp(string) {
-  if (typeof string !== 'string') {
-    throw new TypeError('Expected a string');
-}
-   simpleEvaluate(expression) {
+
+    escapeRegExp(string) {
+        if (typeof string !== 'string') {
+            throw new TypeError('Expected a string');
+        }
+        return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+
+    simpleEvaluate(expression) {
         // Evaluar expresión matemática simple sin usar `eval`
         return this.evaluateMath(expression);
     }
+
     clearDisplay() {
         super.clearDisplay();
         this.operationString = "";
@@ -198,51 +204,51 @@ function escapeRegExp(string) {
     }
 
     writeMathFunction(data) {
-  if (document.getElementById("displayBox").value === "Syntax Error") {
-    super.clearDisplay();
-  }
-  super.writeToDisplay(data);
+        if (document.getElementById("displayBox").value === "Syntax Error") {
+            super.clearDisplay();
+        }
+        super.writeToDisplay(data);
 
-  // Validar la entrada de datos (ejemplo usando una lista permitida)
-  const allowedFunctions = ["sin", "cos", "tan", "log", "exp", "+" ,"-", "*", "/"];
-  if (!allowedFunctions.includes(data)) {
-    console.error("Función no permitida: " + data);
-    return;
-  }
+        // Validar la entrada de datos (ejemplo usando una lista permitida)
+        const allowedFunctions = ["sin", "cos", "tan", "log", "exp", "+", "-", "*", "/"];
+        if (!allowedFunctions.includes(data)) {
+            console.error("Función no permitida: " + data);
+            return;
+        }
 
-  // Usar mathjs para la operación matemática
-  try {
-    const result = math.evaluate(this.operationString + data);
-    this.operationString += data;
-    this.inputList.push(data);
-    document.getElementById("displayBox").value = result;
-  } catch (err) {
-    console.error("Error en la operación matemática: " + err);
-  }
-}
-
-calculateFactorial() {
-    let number = parseInt(this.operationString.match(/\d+/), 10);
-    let result = 0;
-    let operation;
-
-    // Validación de los valores en this.operationMap
-    if (typeof this.operationMap[number] === 'function') {
-  operation = this.operationMap[number];
-} else {
-  console.error("Función desconocida: " + number);
-  return;
-}
-
-    try {
-        result = this.calculateRecursiveFactorial(number);
-    } catch (err) {
-        document.getElementById("displayBox").value = "That number is too big";
+        // Usar mathjs para la operación matemática
+        try {
+            const result = math.evaluate(this.operationString + data);
+            this.operationString += data;
+            this.inputList.push(data);
+            document.getElementById("displayBox").value = result;
+        } catch (err) {
+            console.error("Error en la operación matemática: " + err);
+        }
     }
 
-    this.clearDisplay();
-    document.getElementById("displayBox").value = result;
-}
+    calculateFactorial() {
+        let number = parseInt(this.operationString.match(/\d+/), 10);
+        let result = 0;
+        let operation;
+
+        // Validación de los valores en this.operationMap
+        if (typeof this.operationMap[number] === 'function') {
+            operation = this.operationMap[number];
+        } else {
+            console.error("Función desconocida: " + number);
+            return;
+        }
+
+        try {
+            result = this.calculateRecursiveFactorial(number);
+        } catch (err) {
+            document.getElementById("displayBox").value = "That number is too big";
+        }
+
+        this.clearDisplay();
+        document.getElementById("displayBox").value = result;
+    }
 
     calculateRecursiveFactorial(number) {
         if (number === 1 || number === 0) {
