@@ -149,17 +149,15 @@ if (operation) {
             throw new Error("Invalid expression");
         }
     }
-
-    escapeRegExp(string) {
-  // Escapar caracteres especiales en la expresión regular
+function escapeRegExp(string) {
+  if (typeof string !== 'string') {
+    throw new Error('Input must be a string');
+  }
   return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
-
-    simpleEvaluate(expression) {
+}    simpleEvaluate(expression) {
         // Evaluar expresión matemática simple sin usar `eval`
         return this.evaluateMath(expression);
     }
-
     clearDisplay() {
         super.clearDisplay();
         this.operationString = "";
